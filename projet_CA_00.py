@@ -45,23 +45,30 @@ class Page(Document):
     class page
     """
 
-    def __init__(self, page, id):
+    def __init__(self, page, id, ):
         self.page=page
         self.id=id
         self.elements = self.get_element()
+        self.size = self.get_size()
     def number_lines(self):
         liste1=set()
         for i in self.page:
             liste1.add(i.x0)
 
-    
-    
+        
     def get_element(self):
         elements=[]
         for elt in self.page:
             if isinstance(elt, LTTextContainer) :
                elements.append(Element(elt))
         return elements
+
+    def get_size(self):
+        # methode pour obtenir size_car
+        elt_text = next(iter(elt))   # objet de type  LTTextLineHorizontal
+        elt_size = next(iter(elt_text)).size   # cet objet a une size (premier caractere :)
+        return elt_size.size    
+
 
 class Element(Page):
 
@@ -125,8 +132,9 @@ eltms= pagesss[3].elements
 #print("plus ou moins", eltms[5]> eltms[0])
 eltms_tries = sorted(eltms)
 
-for page in pagesss:
-    page_triee = sorted(page.elements[:])
-    print(page_triee)
+#for page in pagesss:
+#    page_triee = sorted(page.elements[:])
+  #  print(page_triee)
 
 
+print(dir(LTTextLineHorizontal))
