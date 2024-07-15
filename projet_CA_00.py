@@ -68,23 +68,41 @@ class Element(Page):
     def __init__(self, elt):
         
         self.elt = elt
-        self.x0 = self.X_pos()
-        self.y0 = self.Y_pos()
+        self.x0 = self.X_pos
+        self.y0 = self.Y_pos
+        # self.color = self.get_color()
+        
 
         if not isinstance(self.elt, LTTextContainer):
             raise("Element must be a text")
 
 
     def __repr__(self):
-
         return self.elt.get_text()
+        # return self.color + self.elt.get_text()
+    
+    def __lt__(self, other):
+        if self.Y_pos > other.Y_pos:
+            return True
+        elif self.Y_pos == other.Y_pos:
+            return self.X_pos < other.X_pos
+        else:
+            return False
+    
+    # def get_color(self):
+    #    if isinstance(self, LTTextLineHorizontal):
+    #        return '\033[1m'  # bleu
+    #    else:
+    #        return '\033[92m' #vert
+    
 
+    @property
     def X_pos(self):
         """
         retourne  la valeur x0 qui est la limite gauche de la boxe
         """
         return self.elt.x0
-
+    @property
     def Y_pos(self):
         """
         retourne  la valeur x0 qui est la limite basse de la boxe
@@ -92,9 +110,6 @@ class Element(Page):
         return self.elt.y0
 
 
-    # fonction qui donne la taille du caractere de l'element
-    def size_car(self):
-        pass
 
 # ouverture du fichier
 Docu = Document('Tarifs BForBank2024 V8_WEB.pdf')
@@ -107,7 +122,11 @@ eltms= pagesss[3].elements
 
 # affichage des textes de chaque elment
 #print(eltms[:])
+#print("plus ou moins", eltms[5]> eltms[0])
+eltms_tries = sorted(eltms)
 
 for page in pagesss:
-    print(page.elements[:])
+    page_triee = sorted(page.elements[:])
+    print(page_triee)
+
 
