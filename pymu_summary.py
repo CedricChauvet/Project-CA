@@ -70,6 +70,12 @@ def extration_sommaire():
                     df.loc[len(df)] = [title, i, 0]
                 is_empty = False
     
+    # recherche de la page suivante
+    blocks_2, font_size_2 = read_a_page(doc, page_sommaire[0] + 1)
+    for block in blocks_2:
+        pass
+
+
     df.loc[len(df)] = [title, "vide", 0]             
     print(df)
 
