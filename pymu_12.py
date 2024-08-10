@@ -12,9 +12,10 @@ import pprint  # Pour un affichage plus lisible du dictionnaire
 import pandas as pd
 
 
-doc = fitz.open("Tarifs CA_Acquitaine2024 V8_WEB.pdf")
-# doc = fitz.open("Tarifs BForBank2024 V8_WEB.pdf")
-# doc = fitz.open("Tarifs CA_AlpesProvence2024 V8_WEB.pdf")
+# doc = fitz.open("Tarifs CA_Acquitaine2024 V8_WEB.pdf")   ok
+# doc = fitz.open("Tarifs BForBank2024 V8_WEB.pdf")    ok
+# doc = fitz.open("Tarifs CA_AlpesProvence2024 V8_WEB.pdf")  ok
+doc = fitz.open("Tarifs CA_Morbihan2024 V8_WEB.pdf")  # nope, double page
 
 
 def read_a_page(doc, page_nb, reverse =False):
@@ -77,7 +78,7 @@ def nettoyage_page(blocks):
     
     number =[]
     for bloc in blocks:
-        # enleve le bloc sommaire
+        # enleve le bloc sommaire, attention pose un bug sur le premier element, laisser commenté
         #if bloc["text"].count("SOMMAIRE"):
         #    number.append(bloc["line"])
         
@@ -118,6 +119,7 @@ def sommaire_pandas(page_sommaire):
     
     # recupere les size de la selection blocks
     for bloc in blocks:
+        # peut etre rajouter un instruction pour ne pas selectoinner  la taille de font du sommaire
         size.add(bloc["font"])
     size = list(size)
 
@@ -136,8 +138,9 @@ def sommaire_pandas(page_sommaire):
                 df.loc[len(df)] = [title, i]
     print(df)
     
-sommaire = extration_sommaire()
 
+
+sommaire = extration_sommaire()
 sommaire_pandas(sommaire)
 
 
