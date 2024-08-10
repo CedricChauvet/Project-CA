@@ -5,7 +5,7 @@ import pprint  # Pour un affichage plus lisible du dictionnaire
 doc = fitz.open("Tarifs BForBank2024 V8_WEB.pdf")
 
 
-def read_a_page(doc, page_nb):
+def read_a_page(doc, page_nb, reverse =False):
     # Sélectionner une page (par exemple, la première page)
     page = doc[page_nb]
 
@@ -37,7 +37,7 @@ def read_a_page(doc, page_nb):
                             numberofelement += 1
                             # on enleve les pages, les numero de titre
                             if not span["text"].isdigit(): 
-                                block_text += (span["text"] + "\n")
+                                block_text += (span["text"]) #+ "\n")
 
                         font_sizes.add(span["size"])
                         size = span["size"]
@@ -45,5 +45,10 @@ def read_a_page(doc, page_nb):
                 #print("\n", block_text,"#", numberofelement, "***", bbox)
                 block_inst.append({"bbox": bbox, "text": block_text, "number" : numberofelement, "font":size})
     font_sizes = sorted(font_sizes)
-    sorted_blocks = sorted(block_inst, key=lambda b: (b["bbox"][1], b["bbox"][0]))
+    
+    if reverse == False:
+        sorted_blocks = sorted(block_inst, key=lambda b: (b["bbox"][1], b["bbox"][0]))
+    if reverse == True:
+        sorted_blocks = sorted(block_inst, key=lambda b: (b["bbox"][1], b["bbox"][0]), reverse=True)
+         
     return sorted_blocks, font_sizes
