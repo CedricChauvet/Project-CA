@@ -7,8 +7,8 @@ By Ced+
 import fitz  # PyMuPDF
 import pprint  # Pour un affichage plus lisible du dictionnaire
 import pandas as pd
-doc = fitz.open("Tarifs CA_Acquitaine2024 V8_WEB.pdf")
-# doc = fitz.open("Tarifs BForBank2024 V8_WEB.pdf")
+# doc = fitz.open("Tarifs CA_Acquitaine2024 V8_WEB.pdf")
+doc = fitz.open("Tarifs BForBank2024 V8_WEB.pdf")
 
 def read_a_page(doc, page_nb, reverse =False):
     """
@@ -126,7 +126,8 @@ def sommaire_pandas(page_sommaire):
             for i in bloc["text"].split("\n")[0:-1]:
                 df.loc[len(df)] = [title, i]
     print(df)
-    
+    # Enregistrer le DataFrame dans un fichier CSV
+    df.to_csv('mon_fichier10.csv', index=False)
 sommaire = extration_sommaire()
 #page = read_a_page(doc, sommaire + 1)
 #blocks = affichage_page(page)

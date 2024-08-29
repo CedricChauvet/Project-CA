@@ -1,22 +1,19 @@
 """
 Deuxieme approche pour lecture de sommaire
 By Ced+
-Fonctionne avec
-Tarifs CA_Acquitaine2024 V8_WEB.pdf
-Tarifs BForBank2024 V8_WEB
 """
 
 
 import fitz  # PyMuPDF
 import pprint  # Pour un affichage plus lisible du dictionnaire
 import pandas as pd
+#doc = fitz.open("Tarifs CA_Acquitaine2024 V8_WEB.pdf")
+#name_pdf = "Tarifs BForBank2024 V8_WEB.pdf"
+name_pdf =  "Tarifs CA_Acquitaine2024 V8_WEB.pdf"
 
-
-# doc = fitz.open("Tarifs CA_Acquitaine2024 V8_WEB.pdf")   ok
-# doc = fitz.open("Tarifs BForBank2024 V8_WEB.pdf")    ok
-# doc = fitz.open("Tarifs CA_AlpesProvence2024 V8_WEB.pdf")  ok
-doc = fitz.open("Tarifs CA_Morbihan2024 V8_WEB.pdf")  # nope, double page
-
+# dossier ou l'on recupere les sommaire extraits
+path_csv = "./my_csv/"
+doc = fitz.open(name_pdf)
 
 def read_a_page(doc, page_nb, reverse =False):
     """
@@ -26,11 +23,13 @@ def read_a_page(doc, page_nb, reverse =False):
     page = doc[page_nb]
     return page
 
-def extration_sommaire():
+def extration_sommaire(doc):
     """
     cherche le mot somaire dans le document
     return le numero de page
     """
+
+    print("Extraction du fichier", doc)
     page_sommaire=[]
     #df = pd.DataFrame(columns=['Titre', 'ss-titre', 'page'])
     for page in doc:
@@ -78,7 +77,7 @@ def nettoyage_page(blocks):
     
     number =[]
     for bloc in blocks:
-        # enleve le bloc sommaire, attention pose un bug sur le premier element, laisser commenté
+        # enleve le bloc sommaire
         #if bloc["text"].count("SOMMAIRE"):
         #    number.append(bloc["line"])
         
@@ -90,16 +89,18 @@ def nettoyage_page(blocks):
         if bloc["bbox"][3] > 800 or bloc["bbox"][1] < 15:
             number.append(bloc["line"])
     
+    
     number= sorted(number, reverse=True)
     for n in number:
         del blocks[n]
     return blocks
 
 
-def sommaire_pandas(page_sommaire):
+def sommaire_pandas(page_sommaire,doc):
     """
     prend les elements selectionés en table pandas
     """
+    good = True
     page = read_a_page(doc, page_sommaire)
     blocks = affichage_page(page)
     blocks = nettoyage_page(blocks)
@@ -108,18 +109,20 @@ def sommaire_pandas(page_sommaire):
     page2 = read_a_page(doc, page_sommaire + 1)
     blocks2 = affichage_page(page2)
     blocks2 = nettoyage_page(blocks2)
-    
-
-    # # teste si la page suivante fait partie du sommaire
-    if blocks[0]["text"].find(blocks2[0]["text"][0:-1]) == -1:
+ 
+    # pour tests, removable
+    # print("bloc0",blocks[1]["text"])
+    # print("bloc2 0",blocks2[0]["text"])
+    # print("inside", blocks[1]["text"].find(blocks2[0]["text"][0:-5]))
+    # teste si la page suivante fait partie du sommaire
+    if (blocks[0]["text"].find(blocks2[0]["text"][0:-1])) == -1 and  (blocks[1]["text"].find(blocks2[0]["text"][0:-1]) == -1):
         print("plusieur page de sommaire")
         blocks = blocks + blocks2
-    
+
     size = set()
     
     # recupere les size de la selection blocks
     for bloc in blocks:
-        # peut etre rajouter un instruction pour ne pas selectoinner  la taille de font du sommaire
         size.add(bloc["font"])
     size = list(size)
 
@@ -127,7 +130,7 @@ def sommaire_pandas(page_sommaire):
     print("size", size, "idealement de taille 2")
 
     df = pd.DataFrame(columns=['Titre', 'ss-titre'])
-    
+    title = " "
     for bloc in blocks:
         if bloc["font"] == max(size):
             title= bloc["text"].split("\n")[0]
@@ -136,21 +139,24 @@ def sommaire_pandas(page_sommaire):
         if bloc["font"] == size[-2]:
             for i in bloc["text"].split("\n")[0:-1]:
                 df.loc[len(df)] = [title, i]
-    print(df)
+        if bloc["font"] == 10:
+            print("ca", bloc["text"], bloc["line"])
+    return df, good
     
 
 
-sommaire = extration_sommaire()
-sommaire_pandas(sommaire)
+#sommaire = extration_sommaire(doc)
+#sommaire_pandas(sommaire, doc)
 
 
+#page = read_a_page(doc, sommaire)
+#blocks = affichage_page(page)
+#blocks = nettoyage_page(blocks)
 
 # affiche le texte sur le terminal, et les options
-page = read_a_page(doc, sommaire)
-blocks = affichage_page(page)
-blocks = nettoyage_page(blocks)
+
 #for bloc in blocks:
-   # print(bloc["text"], bloc["font"])#, "n", bloc["line"],  bloc["bbox"][1], bloc["bbox"][3])
-   
+#    print(bloc["text"], bloc["font"])#, "n", bloc["line"],  bloc["bbox"][1], bloc["bbox"][3])
+
 
 
