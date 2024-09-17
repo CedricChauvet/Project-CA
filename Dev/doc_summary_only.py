@@ -8,7 +8,7 @@ permet de determiner si le sommaire est sur 1 ou 2 pages
 Enregistre les sommaire dans le repertoire sommaires
 """
 import fitz  # PyMuPDF
-import os
+import os # for file handling
 
 
 # assign directory
