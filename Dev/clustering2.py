@@ -35,7 +35,7 @@ def apply_clustering(group):
             mean_sizes.index[1]: 'Sous-titre'
         }
     else:  # Si un seul cluster
-        cluster_types = {mean_sizes.index[0]: 'probleme'}
+        cluster_types = {mean_sizes.index[0]: 'probleme ou titre'}
     
     group['Type'] = group['Cluster'].map(cluster_types)
     
