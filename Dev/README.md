@@ -5,6 +5,8 @@
 3/ lancer le clustering avec apprentissage non supervisé
 
 
+
+
 Attention au path pour les fichier:
 
   J'ai mis les PDF, dans le dossier ../PDF_CGV
