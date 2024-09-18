@@ -2,7 +2,7 @@
 
 2/ step bi step guide, permet de créer un CSV, contenant les infos des sommaires des toutes les CGV
 
-3/ lancer le clustering avec apprentissage non supervisé
+3/ lancez clustering2.py pour apprentissage non supervisé sur les font_size uniquement
 
 
 
