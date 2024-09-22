@@ -65,4 +65,4 @@ print("file", file_num, df_clustered[['file_number', 'font_size', 'Type']][90:17
 # print(df_clustered.groupby(['file_number', 'Type']).size().unstack(fill_value=0))
 
 # Sauvegarder le résultat
-df_clustered.to_csv('fichier_a_presneter.csv', index=False)
+df_clustered.to_csv('sortie1.csv', index=False)

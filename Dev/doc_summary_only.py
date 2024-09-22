@@ -12,7 +12,7 @@ import os # for file handling
 
 
 # assign directory
-directory = './PDF_CGV' # directory containing the PDF files
+directory = '../PDF_CGV' # directory containing the PDF files
 try:
     os.makedirs("sommaires") # create a directory to save the summaries
 except:
