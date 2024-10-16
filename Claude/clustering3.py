@@ -56,3 +56,4 @@ print(df_clustered.groupby(['file_number', 'Type']).size().unstack(fill_value=0)
 
 # Sauvegarder le résultat
 df_clustered.to_csv('clustering3.csv', index=False)
+df_clustered.head(100).to_csv('clustering3_100.csv', index=False)
